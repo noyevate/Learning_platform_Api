@@ -7,20 +7,20 @@ require("dotenv").config();
 
 var auth = require("../Authentication/authentication");
 
-router.post("/signup", auth.authenticateToken, (req, res) => {
+router.post("/signup",  (req, res) => {
     let user = req.body;
-    query = "select email,password from user where email=?"
+    query = "select name,number,email,password from learning_platform where email=?";
     connection.query(query, [user.email], (err, result) => {
         if (!err) {
             if (result.length <= 0) {
-                query = "insert into user(email,password) values(?,?,)"
-                connection.query(query, [user.name, user.contactNumber, user.email, user.password], (err, result) => {
-                    if (!err) {
+                query = "insert into learning_platform(name,number,email,password) values(?,?,?,?)";
+                connection.query(query, [user.name, user.contactNumber, user.email, user.password], (err, result) =>{
+                    if(!err){
                         return res.status(200).json({
-                            message: "successfully registered"
+                            message: "stutent created!"
                         })
                     }
-                    else {
+                    else{
                         return res.status(500).json(err)
                     }
                 })
@@ -29,8 +29,9 @@ router.post("/signup", auth.authenticateToken, (req, res) => {
                 return res.status(400).json({
                     message: "email already exist"
                 })
-            }
         }
+        }
+            
         else {
             return res.status(500).json(err)
         }
@@ -40,7 +41,7 @@ router.post("/signup", auth.authenticateToken, (req, res) => {
 
 router.post("/login", (req, res) => {
     const user = req.body;
-    query = "select email, password, from user where email=?";
+    query = "select email, password from learning_platform where email=?";
     connection.query(query, [user.email], (err, result) => {
         if (!err) {
             if (result <= 0 || result[0].password != user.password) {
@@ -68,7 +69,15 @@ router.post("/login", (req, res) => {
             return res.status(500).json(err)
         }
     })
-})
+});
+
+router.get("/checkToken", auth.authenticateToken, (req, res) => {
+    return res.status(200).json({
+        message: "true",
+        token: ACCESS_TOKEN
+    })
+});
+
 
 
 module.exports = router;

@@ -4,10 +4,10 @@ const router = express.Router()
 
 var auth = require("../Authentication/authentication")
 
-router.get('/users/:id', auth.authenticateToken, (req, res) => {
-    
+router.get('/user/:id', auth.authenticateToken, (req, res, next) => {
     const id = req.params.id;
-    connection.query('SELECT * FROM user',[id], (err, results) => {
+    query = "select name, course ,email from enrollment where learning_platformId=? "
+    connection.query(query, [id], (err, results) => {
       if (err) {
         console.error('Error executing MySQL query: ' + err);
         res.status(500).json({ error: 'An error occurred' });

@@ -92,8 +92,3 @@ Failure (Status: 404 Not Found)
 {
   "message": "An error occurred"
 }
-
-Copy code
-
-**5. Implement the authentication, enrollment, and user information retrieval logic in the respective route handlers (`/api/login`, `/api/enroll`, and `/api/user/:id`).
-
